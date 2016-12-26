@@ -3,6 +3,7 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     harvest: function(creep) {
         var sources = creep.room.find(FIND_SOURCES);
+
         if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
             creep.moveTo(sources[0]);
         }
@@ -21,7 +22,13 @@ var roleHarvester = {
         // TODO role.distributer that takes energy from storage unity and distributes it everywhere
 
         if (targets.length > 0) {
-            if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            var target = targets[0];
+
+            var transferReturn = creep.transfer(target, RESOURCE_ENERGY);
+
+            if (transferReturn == OK) {
+
+            } else if (transferReturn == ERR_NOT_IN_RANGE) {
                 creep.moveTo(targets[0]);
             }
         }
