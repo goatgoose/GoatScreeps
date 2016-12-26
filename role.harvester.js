@@ -11,10 +11,10 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     dropOff: function(creep) {
         var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                structure.structureType == STRUCTURE_SPAWN ||
-                structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN ||
+                        structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
             }
         });
 
@@ -29,7 +29,6 @@ var roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        //noinspection JSUnnecessarySemicolon,JSUnnecessarySemicolon,JSUnnecessarySemicolon
         if(creep.carry.energy < creep.carryCapacity) {
             this.harvest(creep);
         } else {
