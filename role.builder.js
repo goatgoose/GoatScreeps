@@ -1,3 +1,5 @@
+var respawnManager = require('respawnManager');
+
 var roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -22,9 +24,11 @@ var roleBuilder = {
 				var container = Game.spawns['MainSpawn']; // temp
 
 				if (container != null) {
-					if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-						//creep.moveTo(container);
-					}
+					if (!respawnManager.respawning) {
+                        if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(container);
+                        }
+                    }
 				}
 
 			} else if (buildResponse == ERR_NOT_IN_RANGE) {

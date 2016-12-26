@@ -4,11 +4,13 @@ var BUILDER_COUNT = 1;
 
 var DESIRED_CREEP_COUNTS = {
     harvester: 10,
-    upgrader: 1,
-    builder: 2
+    upgrader: 0,
+    builder: 0
 };
 
 var respawnManager = {
+
+    respawning: false,
 
     run: function() {
         var creepCounts = {
@@ -22,8 +24,11 @@ var respawnManager = {
             creepCounts[creep.memory.role] += 1;
         }
 
+        this.respawning = false;
+
         for (var creepCount in creepCounts) {
             if (creepCounts[creepCount] < DESIRED_CREEP_COUNTS[creepCount]) {
+                this.respawning = true;
                 Game.spawns['MainSpawn'].createCreep([WORK, CARRY, CARRY, MOVE, MOVE], null, {role: creepCount});
                 console.log("creating " + creepCount);
             }
