@@ -1,15 +1,12 @@
 var roleHarvester = {
 
-    /** @param {Creep} creep **/
     harvest: function(creep) {
-        var sources = creep.room.find(FIND_SOURCES);
-
-        if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[0]);
+        var source = Game.getObjectById(creep.memory.source);
+        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(source);
         }
     },
 
-    /** @param {Creep} creep **/
     dropOff: function(creep) {
         var targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
@@ -36,8 +33,14 @@ var roleHarvester = {
         // TODO wait at storage unit until free space available to drop off everything
     },
 
-    /** @param {Creep} creep **/
     run: function(creep) {
+        if (creep.memory.source == undefined) {
+            var sources = creep.room.find(FIND_SOURCES);
+            if (sources.length > 0) {
+                creep.memory.source = sources[Math.floor(Math.random() * (sources.length))].id;
+            }
+        }
+
         if(creep.carry.energy < creep.carryCapacity) {
             this.harvest(creep);
         } else {

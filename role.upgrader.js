@@ -23,7 +23,7 @@ var roleUpgrader = {
                 creep.moveTo(controller);
             }
         } else {
-            roleHarvester.run(creep);
+            //roleHarvester.run(creep);
         }
 
 
