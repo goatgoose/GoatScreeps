@@ -13,7 +13,7 @@ var roleUpgrader = {
         if(upgradeResponse == OK) {
 
         } else if (upgradeResponse == ERR_NOT_ENOUGH_RESOURCES) {
-            if ((KEEP_FROM_DOWNGRADING && creep.room.controller.ticksToDowngrade < 400) || !KEEP_FROM_DOWNGRADING) {
+            if ((KEEP_FROM_DOWNGRADING && creep.room.controller.ticksToDowngrade < 1000) || !KEEP_FROM_DOWNGRADING) {
                 if (creep.withdraw(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(spawn);
                 }
