@@ -1,34 +1,61 @@
 var roleHarvester = require('role.harvester');
 var respawnManager = require('respawnManager');
 
-var KEEP_FROM_DOWNGRADING = false;
-
 var roleUpgrader = {
 
-    /** @param {Creep} creep **/
-    run: function(creep) {
+    withdraw: function(creep) {
         var spawn = Game.spawns['MainSpawn'];
-        var controller = creep.room.controller;
 
-        if (((KEEP_FROM_DOWNGRADING && creep.room.controller.ticksToDowngrade < 2000) || (!KEEP_FROM_DOWNGRADING) && !respawnManager.respawning)) {
-            var upgradeResponse = creep.upgradeController(controller);
+        if (!respawnManager.respawning) {
+            var widthdrawResponse = creep.withdraw(spawn, RESOURCE_ENERGY);
 
-            if(upgradeResponse == OK) {
+            if (widthdrawResponse == OK) {
 
-            } else if (upgradeResponse == ERR_NOT_ENOUGH_RESOURCES) {
-                if (creep.withdraw(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(spawn);
-                }
-            } else if (upgradeResponse == ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller);
+            } else if (widthdrawResponse == ERR_NOT_ENOUGH_RESOURCES) {
+
+            } else if (widthdrawResponse == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn);
+            }
+
+            if (_.sum(creep.carry) > 0) {
+                creep.memory.mode = "upgrade";
             }
         } else {
-            //roleHarvester.run(creep);
+            creep.moveTo(spawn);
+        }
+    },
+
+    upgrade: function(creep) {
+        var controller = creep.room.controller;
+        var upgradeResponse = creep.upgradeController(controller);
+
+        if(upgradeResponse == OK) {
+
+        } else if (upgradeResponse == ERR_NOT_ENOUGH_RESOURCES) {
+            
+        } else if (upgradeResponse == ERR_NOT_IN_RANGE) {
+            creep.moveTo(controller);
         }
 
+        if (_.sum(creep.carry) == 0) {
+            creep.memory.mode = "withdraw";
+        }
+    },
 
+    run: function(creep) {
+        if (creep.memory.mode == undefined) {
+            creep.memory.mode = "withdraw";
+        }
 
+        if (creep.memory.mode == "withdraw") {
+            this.withdraw(creep);
+        } else if (creep.memory.mode == "upgrade") {
+            this.upgrade(creep);
+        } else {
+            creep.memory.mode = "upgrade";
+        }
 	}
+
 };
 
 module.exports = roleUpgrader;
