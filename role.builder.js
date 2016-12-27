@@ -1,7 +1,7 @@
 var respawnManager = require('respawnManager');
 var roleHarvester = require('role.harvester');
 
-var REPAIR_LOWER_THAN = 50; // %
+var REPAIR_LOWER_THAN = 80; // %
 
 var roleBuilder = {
 

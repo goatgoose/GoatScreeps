@@ -1,11 +1,9 @@
-var HARVESTER_COUNT = 2;
-var UPGRADER_COUNT = 1;
-var BUILDER_COUNT = 1;
 
 var DESIRED_CREEP_COUNTS = {
     upgrader: 1,
-    harvester: 10,
-    builder: 3
+    harvester: 15,
+    builder: 5,
+    fixer: 1
 };
 
 var respawnManager = {
@@ -18,7 +16,8 @@ var respawnManager = {
         var creepCounts = {
             upgrader: 0,
             harvester: 0,
-            builder: 0
+            builder: 0,
+            fixer: 0
         };
 
         for (var name in Game.creeps) {

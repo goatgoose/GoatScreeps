@@ -32,7 +32,7 @@ var roleUpgrader = {
         if(upgradeResponse == OK) {
 
         } else if (upgradeResponse == ERR_NOT_ENOUGH_RESOURCES) {
-            
+
         } else if (upgradeResponse == ERR_NOT_IN_RANGE) {
             creep.moveTo(controller);
         }
