@@ -16,7 +16,7 @@ var roleBuilder = {
             } else if (widthdrawResponse == ERR_NOT_ENOUGH_RESOURCES) {
 
             } else if (widthdrawResponse == ERR_NOT_IN_RANGE) {
-                creep.moveTo(container);
+                creep.moveTo(spawn);
             }
 
             if (_.sum(creep.carry) == creep.carryCapacity) {

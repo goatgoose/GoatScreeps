@@ -5,32 +5,29 @@ var roleHarvester = {
         if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
             creep.moveTo(source);
         }
+
+        if (_.sum(creep.carry) == creep.carryCapacity) {
+            creep.memory.mode = "give";
+        }
     },
 
     dropOff: function(creep) {
-        var targets = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
-            }
-        });
 
         // TODO role.distributer that takes energy from storage unity and distributes it everywhere
 
-        if (targets.length > 0) {
-            var target = targets[0];
+        var spawn = Game.spawns['MainSpawn'];
 
-            var transferReturn = creep.transfer(target, RESOURCE_ENERGY);
+        var transferReturn = creep.transfer(spawn, RESOURCE_ENERGY);
 
-            if (transferReturn == OK) {
+        if (transferReturn == OK) {
 
-            } else if (transferReturn == ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets[0]);
-            }
+        } else if (transferReturn == ERR_NOT_IN_RANGE) {
+            creep.moveTo(spawn);
         }
 
-        // TODO wait at storage unit until free space available to drop off everything
+        if (_.sum(creep.carry) == 0) {
+            creep.memory.mode = "harvest";
+        }
     },
 
     run: function(creep) {
@@ -40,11 +37,16 @@ var roleHarvester = {
                 creep.memory.source = sources[Math.floor(Math.random() * (sources.length))].id;
             }
         }
+        if (creep.memory.mode == undefined) {
+            creep.memory.mode = "harvest";
+        }
 
-        if(creep.carry.energy < creep.carryCapacity) {
+        if(creep.memory.mode == "harvest") {
             this.harvest(creep);
-        } else {
+        } else if (creep.memory.mode == "give") {
             this.dropOff(creep);
+        } else {
+            creep.memory.mode = "harvest";
         }
 	}
 };
